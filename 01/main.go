@@ -32,8 +32,7 @@ func runMain() error {
 	diffSum := 0
 	diffSum = getDiffSum(list1, diffSum, list2)
 
-	similaritySum := 0
-	similaritySum = getSimilaritySum(list1, list2, similaritySum)
+	similaritySum := getSimilaritySum(list1, list2)
 
 	fmt.Println("Diff:", diffSum)
 	fmt.Println("Similarity:", similaritySum)
@@ -47,15 +46,16 @@ func getDiffSum(list1 []int, diffSum int, list2 []int) int {
 	return diffSum
 }
 
-func getSimilaritySum(list1 []int, list2 []int, similaritySum int) int {
+func getSimilaritySum(list1 []int, list2 []int) int {
+	similaritySum := 0
 	count1 := getNumberCount(list1)
 	count2 := getNumberCount(list2)
-	for key, count1Value := range count1 {
-		count2Value, ok := count2[key]
+	for numberValueKey, count1Value := range count1 {
+		count2Value, ok := count2[numberValueKey]
 		if !ok {
 			count2Value = 0
 		}
-		similaritySum += count1Value * count2Value
+		similaritySum += numberValueKey * count1Value * count2Value
 	}
 	return similaritySum
 }
@@ -71,13 +71,14 @@ func getDiff(i1 int, i2 int) int {
 func getNumberCount(list []int) map[int]int {
 	result := make(map[int]int)
 	for i := 0; i < len(list); i++ {
-		existing, ok := result[i]
+		number := list[i]
+		existing, ok := result[number]
 		if !ok {
-			result[i] = 0
+			result[number] = 0
 			existing = 0
 		}
 
-		result[i] = existing + 1
+		result[number] = existing + 1
 	}
 	return result
 }
